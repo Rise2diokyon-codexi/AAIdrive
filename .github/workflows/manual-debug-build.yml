@@ -1,0 +1,42 @@
+name: Manual Debug APK Build
+
+# Manually triggered build to produce a debug APK for review/testing,
+# without needing the signing/secrets required by the release "package" job
+# in android-build.yml. Reuses the same checkout/JDK/external-deps steps.
+on:
+  workflow_dispatch:
+
+jobs:
+  build-debug-apk:
+    runs-on: ubuntu-latest
+    steps:
+      - name: Checkout the project
+        uses: actions/checkout@v4
+        with:
+          fetch-depth: 0
+          submodules: true
+
+      - name: Set up JDK 17
+        uses: actions/setup-java@v4
+        with:
+          distribution: 'zulu'
+          java-version: 17
+
+      - name: Prepare cached external dependencies
+        uses: actions/cache@v4
+        with:
+          key: aaidrive_external_${{ hashFiles('.github/actions/download-externals-action/download.sh') }}
+          path: |
+            external
+      - name: Download build dependencies
+        uses: ./.github/actions/download-externals-action
+
+      - name: Build debug APK (nomap, no analytics - no secrets required)
+        run: ./gradlew assembleNomapNonalyticsFullDebug --stacktrace
+
+      - name: Upload debug APK
+        uses: actions/upload-artifact@v4
+        with:
+          name: aaidrive-debug-apk
+          retention-days: 7
+          path: app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk
