@@ -73,7 +73,8 @@ interface AppSettings {
 		PREFER_CAR_LANGUAGE("Prefer_Car_Language", "true", "Prefer the car's language instead of the phone's language"),
 		FORCE_CAR_LANGUAGE("Force_Car_Language", "", "Force a specific language for the car apps"),
 		ENABLED_ANALYTICS("Enable_Analytics", "false", "Enable Analytics module"),
-		MUSIC_SEARCH_QUERY_HISTORY("Music_Search_Query_History","", "Music service search query history")
+		MUSIC_SEARCH_QUERY_HISTORY("Music_Search_Query_History","", "Music service search query history"),
+		DASHBOARD_THEME("Dashboard_Theme", "M_Classic", "Graphical theme for the My BMW Drive dashboard")
 	}
 
 	/** Store the active preferences in a singleton */
