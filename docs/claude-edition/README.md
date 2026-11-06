@@ -121,6 +121,16 @@ Tests unitaires ajoutés (exécutés par le workflow, rapport en artefact `MyAID
 `DashboardFormatTest`, `DashboardDataSourceTest`, `EditionDiagnosticsTest`, plus toute la suite existante.
 **Une compilation et des tests verts ne valident pas le comportement dans la voiture.**
 
+Résultat du run GitHub Actions `42308538451` (commit `329a576`, code identique à la tête de branche) :
+
+| | |
+|---|---|
+| Build `assembleNomapNonalyticsFullDebug` | ✅ succès |
+| Tests unitaires | ✅ 510 tests, 0 échec, 0 ignoré (dont 19 nouveaux : 7 + 4 + 8) |
+| APK | `MyAIDrive-Claude-debug.apk`, SHA-256 `613364e550007eaf6712c561e358aa983c35c97e3d2993b6164104ae28c52b57` |
+| Manifeste fusionné (décodé) | package `com.myaidrive.claude` ; providers `com.myaidrive.claude.cardata.provider` et `com.myaidrive.claude.androidx-startup` uniquement (la seule mention `io.bimmergestalt.cardata.provider` est un `<queries>`, pas une déclaration) ; `DashboardAppService` présent |
+| Signature | `CN=Android Debug` (clé jetable : aucun secret de keystore configuré, voir §5) |
+
 ## 8. À valider dans la BMW (non vérifiable ici)
 
 - [ ] L'app se connecte (BMW Connected/My BMW installé, édition active seule).
