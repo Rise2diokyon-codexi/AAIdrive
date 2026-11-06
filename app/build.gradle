@@ -40,8 +40,11 @@ android {
         hideBranches = [ 'main' ]
         // include build number for CI builds, omit for local builds
         // because local dev commonly involves switching between branches
+        // BBBB (4 digits, up to 9999): this fork has no git tags, so androidGitVersion
+        // falls back to the total commit count as the build number, which already
+        // exceeds the 3-digit width upstream uses where tags keep it small
         if (isRunningOnCI) {
-            codeFormat = 'MMNNPPBBB'
+            codeFormat = 'MMNNPPBBBB'
         } else {
             codeFormat = 'MMNNPPXXX'
         }
