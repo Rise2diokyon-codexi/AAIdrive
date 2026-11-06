@@ -12,7 +12,8 @@
 2. Spotify's remote redirect URI is hard-coded as `me.hufman.androidautoidrive://spotify_callback`. A new Android package ID does not automatically register a new Spotify redirect. Spotify Developer Dashboard configuration must match the actual redirect, and any Android app authentication constraints must be respected.
 3. Android notification-listener access is a separate prerequisite for general media session discovery and control. The user's screenshots show Android restricting this permission. Do not bypass Android security controls; audit APK provenance/signature and request permission through the supported OS interface.
 4. The dashboard's six Kotlin prototype classes are not wired into BMW RHMI navigation. Existing dashboard values are simulated; they must never be presented as live CDS telemetry.
-5. The new `DashboardBitmapRenderer` can render both themes off-screen for future RHMI image delivery, but does not itself register a car menu or stream images.
+5. The new `DashboardBitmapRenderer` can render both themes off-screen for future RHMI image delivery, but does not itself register a graphical car menu or stream images.
+6. The existing BMW RHMI Car Information category now includes a `My AI Drive GPT` text page using six real CDS-backed flows, preserving the old categories. This is not the graphical dashboard.
 
 ## Security and compatibility concerns
 - The inherited manifest requests sensitive permissions including SMS and calendar and exports a CDS provider. Review actual feature use and access controls before requesting additional grants.
@@ -27,7 +28,8 @@
 - [ ] Verify notification listener is available through normal Android settings.
 - [ ] Test Spotify and other music-app metadata/controls; document credentials and limitations.
 - [ ] Verify BMW iDrive 6 detects the application and navigates correctly.
-- [ ] Wire My AI Drive to RHMI and live CDS values, then validate on the actual vehicle.
+- [x] Add a text-only My AI Drive GPT RHMI category backed by existing CDS telemetry flows (source change, not yet car-tested).
+- [ ] Wire graphical dashboard bitmaps to RHMI and validate on the actual vehicle.
 - [ ] Measure connection reliability, CPU/memory usage and error logs.
 
 ## Current status
