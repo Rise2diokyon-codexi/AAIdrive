@@ -106,7 +106,3 @@ project.afterEvaluate {
         }
     }
 }
-
-coveralls {
-    jacocoReportPath 'build/reports/jacoco/jacoco.xml'
-}
