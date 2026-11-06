@@ -40,27 +40,34 @@ android {
         // include build number for CI builds, omit for local builds
         // because local dev commonly involves switching between branches
         //
-        // This fork has no git tags, so androidGitVersion falls back to the total commit
-        // count as the build number (1736+, growing), instead of commits-since-tag like
-        // upstream. The plugin caps the whole codeFormat at 9 digits total (versionCode
-        // must stay under 2100000000), so widening B alone past 9 digits is rejected
-        // outright. Since major/minor/patch are always 0 here with no tags, give them a
-        // single digit each and let the build number use the remaining 6 digits
-        // (up to 999999), which comfortably outlives this fork's realistic commit count.
-        // If real version tags are ever added to this fork, M/N/P will need widening back.
+        // This fork has no git tags (confirmed via the GitHub API), so androidGitVersion
+        // falls back to the total commit count as its build number - currently 1736+ and
+        // growing with every commit, instead of the small commits-since-tag count upstream
+        // gets. 'MNPBBBBBB' keeps that number itself safely within the plugin's own 9-digit
+        // ceiling (major/minor/patch are always 0 with no tags, so 1 digit each is enough;
+        // the 6-digit build segment covers up to 999999 commits). That number alone is
+        // still disconnected from real releases though: upstream's latest published tag is
+        // 1.4.4 (checked against github.com/BimmerGestalt/AAIdrive/releases), which under
+        // the original MM NN PP BBB scheme produces versionCodes around 10,404,000-10,404,999.
+        // VERSION_CODE_BASELINE below sits above that range so this fork's builds never
+        // produce a versionCode that regresses against an already-published release.
         if (isRunningOnCI) {
             codeFormat = 'MNPBBBBBB'
         } else {
             codeFormat = 'MMNNPPXXX'
         }
     }
+    // Keeps versionCode monotonically increasing and clear of any already-published
+    // AAIdrive release (see the androidGitVersion comment above), while staying far
+    // under Android's 2,100,000,000 versionCode ceiling.
+    final VERSION_CODE_BASELINE = 10_410_000
     defaultConfig {
         applicationId "me.hufman.androidautoidrive"
         compileSdk 35
         minSdkVersion 23
         targetSdkVersion 36
         multiDexEnabled false
-        versionCode androidGitVersion.code() + 1
+        versionCode VERSION_CODE_BASELINE + androidGitVersion.code() + 1
         versionName androidGitVersion.name()
 //        testInstrumentationRunner "androidx.test.runner.AndroidJUnitRunner"
         testInstrumentationRunner 'me.hufman.androidautoidrive.DexOpenerAndroidJUnitRunner'
