@@ -1078,6 +1078,11 @@
                 <action android:name="me.hufman.androidautoidrive.carconnection.service" />
             </intent-filter>
         </service>
+        <service android:name=".carapp.dashboard.DashboardAppService" android:exported="false">
+            <intent-filter>
+                <action android:name="me.hufman.androidautoidrive.carconnection.service" />
+            </intent-filter>
+        </service>
         <service android:name=".carapp.music.MusicAppService" android:exported="false">
             <intent-filter>
                 <action android:name="me.hufman.androidautoidrive.carconnection.service" />

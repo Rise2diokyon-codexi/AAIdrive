@@ -4,7 +4,6 @@ import android.util.Log
 import de.bmw.idrive.BMWRemoting
 import io.bimmergestalt.idriveconnectkit.RHMIDimensions
 import io.bimmergestalt.idriveconnectkit.rhmi.*
-import me.hufman.androidautoidrive.carapp.maps.FrameUpdater
 
 /**
  * Callbacks for user interactions with the fullscreen display
@@ -17,6 +16,15 @@ interface FullImageInteraction {
 }
 
 /**
+ * Whatever produces the frames shown in the fullscreen image: the map's screen capture,
+ * or the My AI Drive dashboard renderer
+ */
+interface FullImageFrameSink {
+	fun showWindow(width: Int, height: Int, destination: RHMIModel)
+	fun hideWindow(destination: RHMIModel)
+}
+
+/**
  * Settings to pass in to the fullscreen dispay
  */
 interface FullImageConfig {
@@ -24,7 +32,7 @@ interface FullImageConfig {
 	val rhmiDimensions: RHMIDimensions
 }
 
-class FullImageView(val state: RHMIState, val title: String, val config: FullImageConfig, val interaction: FullImageInteraction, val frameUpdater: FrameUpdater) {
+class FullImageView(val state: RHMIState, val title: String, val config: FullImageConfig, val interaction: FullImageInteraction, val frameUpdater: FullImageFrameSink) {
 	companion object {
 		val TAG = "FullImageView"
 		fun fits(state: RHMIState): Boolean {

@@ -6,13 +6,14 @@ import android.os.Handler
 import android.util.Log
 import de.bmw.idrive.BMWRemoting
 import io.bimmergestalt.idriveconnectkit.rhmi.RHMIModel
+import me.hufman.androidautoidrive.carapp.FullImageFrameSink
 
 interface FrameModeListener {
 	fun onResume()
 	fun onPause()
 }
 
-class FrameUpdater(val display: VirtualDisplayScreenCapture, val modeListener: FrameModeListener?): Runnable {
+class FrameUpdater(val display: VirtualDisplayScreenCapture, val modeListener: FrameModeListener?): Runnable, FullImageFrameSink {
 	var destination: RHMIModel? = null
 	var isRunning = true
 	private var handler: Handler? = null
@@ -50,13 +51,13 @@ class FrameUpdater(val display: VirtualDisplayScreenCapture, val modeListener: F
 		handler?.removeCallbacks(this)
 	}
 
-	fun showWindow(width: Int, height: Int, destination: RHMIModel) {
+	override fun showWindow(width: Int, height: Int, destination: RHMIModel) {
 		this.destination = destination
 		Log.i(TAG, "Changing map mode to $width x $height")
 		display.changeImageSize(width, height)
 		modeListener?.onResume()
 	}
-	fun hideWindow(destination: RHMIModel) {
+	override fun hideWindow(destination: RHMIModel) {
 		if (this.destination == destination) {
 			this.destination = null
 			modeListener?.onPause()

@@ -74,7 +74,9 @@ interface AppSettings {
 		FORCE_CAR_LANGUAGE("Force_Car_Language", "", "Force a specific language for the car apps"),
 		ENABLED_ANALYTICS("Enable_Analytics", "false", "Enable Analytics module"),
 		MUSIC_SEARCH_QUERY_HISTORY("Music_Search_Query_History","", "Music service search query history"),
-		DASHBOARD_THEME("Dashboard_Theme", "M_Classic", "Graphical theme for the My BMW Drive dashboard")
+		DASHBOARD_THEME("Dashboard_Theme", "M_Classic", "Graphical theme for the My AI Drive dashboard"),
+		DASHBOARD_DEMO_MODE("Dashboard_Demo_Mode", "false", "Show clearly-labelled simulated values on the My AI Drive dashboard"),
+		CAR_CONNECTION_ENABLED("Car_Connection_Enabled", "true", "Allow this edition to connect to the car (only one edition should be active)")
 	}
 
 	/** Store the active preferences in a singleton */
