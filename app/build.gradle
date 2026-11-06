@@ -39,11 +39,17 @@ android {
         hideBranches = [ 'main' ]
         // include build number for CI builds, omit for local builds
         // because local dev commonly involves switching between branches
-        // BBBB (4 digits, up to 9999): this fork has no git tags, so androidGitVersion
-        // falls back to the total commit count as the build number, which already
-        // exceeds the 3-digit width upstream uses where tags keep it small
+        //
+        // This fork has no git tags, so androidGitVersion falls back to the total commit
+        // count as the build number (1736+, growing), instead of commits-since-tag like
+        // upstream. The plugin caps the whole codeFormat at 9 digits total (versionCode
+        // must stay under 2100000000), so widening B alone past 9 digits is rejected
+        // outright. Since major/minor/patch are always 0 here with no tags, give them a
+        // single digit each and let the build number use the remaining 6 digits
+        // (up to 999999), which comfortably outlives this fork's realistic commit count.
+        // If real version tags are ever added to this fork, M/N/P will need widening back.
         if (isRunningOnCI) {
-            codeFormat = 'MMNNPPBBBB'
+            codeFormat = 'MNPBBBBBB'
         } else {
             codeFormat = 'MMNNPPXXX'
         }
