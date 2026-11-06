@@ -1128,7 +1128,7 @@
         </service>
 
         <provider
-            android:authorities="io.bimmergestalt.cardata.provider"
+            android:authorities="${applicationId}.cardata.provider"
             android:name="me.hufman.androidautoidrive.CDSContentProvider"
             android:exported="true"
             android:readPermission="io.bimmergestalt.permission.CDS_normal"
