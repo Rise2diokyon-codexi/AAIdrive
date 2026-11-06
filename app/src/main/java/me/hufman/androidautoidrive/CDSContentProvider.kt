@@ -26,7 +26,7 @@ class CDSContentProvider: ContentProvider(), CDSEventHandler {
 		// how long to wait before unsubscribing an idle CDS property
 		private const val IDLE_UNSUBSCRIBE_TIMEOUT = 10000
 
-		const val CONTENT_PROVIDER_AUTHORITY = "io.bimmergestalt.cardata.provider"
+		val CONTENT_PROVIDER_AUTHORITY = BuildConfig.APPLICATION_ID + ".cardata.provider"
 		const val CONTENT_PROVIDER_CAPABILITIES = "content://$CONTENT_PROVIDER_AUTHORITY/capabilities"
 		const val CONTENT_PROVIDER_CDS = "content://$CONTENT_PROVIDER_AUTHORITY/cds"
 
