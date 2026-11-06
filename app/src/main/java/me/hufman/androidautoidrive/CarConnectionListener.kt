@@ -16,6 +16,11 @@ import io.bimmergestalt.idriveconnectkit.android.IDriveConnectionReceiver
  * to subscribe IDriveConnectionListener manually
  */
 class CarConnectionListener: BroadcastReceiver() {
+	companion object {
+		// edition-specific, so the BMW Connected app only wakes up the edition that announced itself
+		fun connectAction(context: Context) = "${context.packageName}.CarConnectionListener_START"
+		fun disconnectAction(context: Context) = "${context.packageName}.CarConnectionListener_STOP"
+	}
 	private val TAG = "CarConnectionListener"
 
 	override fun onReceive(context: Context?, intent: Intent?) {
@@ -25,7 +30,7 @@ class CarConnectionListener: BroadcastReceiver() {
 
 		try {
 			if (intent.action == IDriveConnectionReceiver.INTENT_ATTACHED ||
-					intent.action == "me.hufman.androidautoidrive.CarConnectionListener_START") {
+					intent.action == connectAction(context)) {
 				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 					// this is a clear signal of car connection, we can confidently startForeground
 					context.startForegroundService(Intent(context, MainService::class.java).setAction(MainService.ACTION_START))
@@ -34,7 +39,7 @@ class CarConnectionListener: BroadcastReceiver() {
 				}
 			}
 			if (intent.action == IDriveConnectionReceiver.INTENT_DETACHED ||
-					intent.action == "me.hufman.androidautoidrive.CarConnectionListener_STOP") {
+					intent.action == disconnectAction(context)) {
 				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
 					// we have to startForegroundService everywhere
 					context.startForegroundService(Intent(context, MainService::class.java).setAction(MainService.ACTION_STOP))

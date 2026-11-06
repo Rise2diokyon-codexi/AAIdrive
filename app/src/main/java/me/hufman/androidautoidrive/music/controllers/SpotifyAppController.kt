@@ -17,6 +17,7 @@ import com.spotify.protocol.client.Subscription
 import com.spotify.protocol.types.*
 import kotlinx.coroutines.*
 import me.hufman.androidautoidrive.*
+import me.hufman.androidautoidrive.BuildConfig
 import me.hufman.androidautoidrive.Observable
 import me.hufman.androidautoidrive.carapp.L
 import me.hufman.androidautoidrive.music.*
@@ -32,7 +33,9 @@ import java.util.*
 class SpotifyAppController(context: Context, val remote: SpotifyAppRemote, val webApi: SpotifyWebApi, val appSettings: MutableAppSettings, val isProbing: Boolean): MusicAppController {
 	companion object {
 		const val TAG = "SpotifyAppController"
-		const val REDIRECT_URI = "me.hufman.androidautoidrive://spotify_callback"
+		// must match the appAuthRedirectScheme manifest placeholder (the applicationId) and the
+		// redirect URI registered for the client id in the Spotify Developer Dashboard
+		const val REDIRECT_URI = BuildConfig.APPLICATION_ID + "://spotify_callback"
 
 		fun getClientId(context: Context): String {
 			return context.packageManager.getApplicationInfoCompat(context.packageName, PackageManager.GET_META_DATA)

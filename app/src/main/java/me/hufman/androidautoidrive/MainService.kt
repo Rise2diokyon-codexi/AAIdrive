@@ -210,13 +210,13 @@ class MainService: Service() {
 	private fun announceCarAPI() {
 		val myApp = CarAPIAppInfo(
 				id = packageName,
-				title = "Android Auto IDrive",
+				title = getString(R.string.app_name),
 				category = "OnlineServices",
 				brandType = BrandType.ALL,
 				version = "v2",
 				rhmiVersion = "v2",
-				connectIntentName = "me.hufman.androidautoidrive.CarConnectionListener_START",
-				disconnectIntentName = "me.hufman.androidautoidrive.CarConnectionListener_STOP",
+				connectIntentName = CarConnectionListener.connectAction(applicationContext),
+				disconnectIntentName = CarConnectionListener.disconnectAction(applicationContext),
 				appIcon = null
 		)
 		myApp.announceApp(applicationContext)

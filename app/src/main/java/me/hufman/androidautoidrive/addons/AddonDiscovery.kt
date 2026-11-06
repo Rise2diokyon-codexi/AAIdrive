@@ -4,14 +4,16 @@ import android.content.Intent
 import android.content.pm.PackageManager
 import android.content.pm.PackageManager.PERMISSION_GRANTED
 import android.graphics.drawable.ColorDrawable
+import me.hufman.androidautoidrive.BuildConfig
 import me.hufman.androidautoidrive.utils.PackageManagerCompat.getPackageInfoCompat
 import me.hufman.androidautoidrive.utils.PackageManagerCompat.queryIntentServicesCompat
 import me.hufman.androidautoidrive.utils.PackageManagerCompat.resolveActivityCompat
 
 class AddonDiscovery(val packageManager: PackageManager) {
 	companion object {
-		const val PERMISSION_NORMAL = "io.bimmergestalt.permission.CDS_normal"
-		const val PERMISSION_PERSONAL = "io.bimmergestalt.permission.CDS_personal"
+		// per-edition permission names: two differently-signed apps cannot define the same permission
+		const val PERMISSION_NORMAL = BuildConfig.APPLICATION_ID + ".permission.CDS_normal"
+		const val PERMISSION_PERSONAL = BuildConfig.APPLICATION_ID + ".permission.CDS_personal"
 		const val INTENT_CONNECTION_SERVICE = "io.bimmergestalt.carconnection.service"
 		const val INTENT_DATA_SERVICE = "io.bimmergestalt.cardata.service"
 

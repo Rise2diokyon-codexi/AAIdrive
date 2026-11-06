@@ -30,7 +30,7 @@ def isRunningOnCI = System.getenv("CI") == "true"
 final BUILD_DATE = new Date().toZonedDateTime().toEpochSecond()
 
 base {
-    archivesName = "androidautoidrive-${androidGitVersion.name()}"
+    archivesName = "MyAIDrive-Claude-${androidGitVersion.name()}"
 }
 android {
     namespace 'me.hufman.androidautoidrive'
@@ -55,7 +55,11 @@ android {
         }
     }
     defaultConfig {
-        applicationId "me.hufman.androidautoidrive"
+        // My AI Drive - Claude Edition: its own Android identity, so it installs alongside the
+        // official AAIdrive and the GPT Edition without sharing or overwriting their data.
+        // The Kotlin namespace (me.hufman.androidautoidrive) is unchanged on purpose.
+        applicationId "com.myaidrive.claude"
+        buildConfigField "String", "EDITION_NAME", '"Claude Edition"'
         compileSdk 35
         minSdkVersion 23
         targetSdkVersion 36
