@@ -73,9 +73,11 @@
         <package android:name="com.xiaomi.calendar" />
     </queries>
 
+    <!-- allowBackup=false: the settings file holds the Spotify OAuth refresh token (SPOTIFY_AUTH_STATE_JSON),
+         which must not leave the phone through adb/cloud backups -->
     <application
         android:name=".ApplicationCallbacks"
-        android:allowBackup="true"
+        android:allowBackup="false"
         android:icon="@mipmap/ic_launcher"
         android:label="@string/app_name"
         android:supportsRtl="true"

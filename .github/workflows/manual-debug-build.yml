@@ -1,14 +1,24 @@
 name: Manual Debug APK Build
 
-# Manually triggered build to produce a debug APK for review/testing,
-# without needing the signing/secrets required by the release "package" job
-# in android-build.yml. Reuses the same checkout/JDK/external-deps steps.
+# My AI Drive - Claude Edition (branch feature/my-bmw-drive-claude).
+# Manually triggered: builds the nomap/nonalytics debug APK, runs the unit tests and
+# publishes MyAIDrive-Claude-debug.apk. Reuses the checkout/JDK/external-deps steps of
+# android-build.yml.
+#
+# Optional repository secrets (Settings > Secrets and variables > Actions), never committed:
+#   MYAIDRIVE_CLAUDE_SPOTIFY_CLIENT_ID   Spotify app client id registered for com.myaidrive.claude
+#   MYAIDRIVE_CLAUDE_KEYSTORE_BASE64     base64 of a keystore giving the APK a stable signature
+#   MYAIDRIVE_CLAUDE_KEYSTORE_PASSWORD, MYAIDRIVE_CLAUDE_KEY_ALIAS, MYAIDRIVE_CLAUDE_KEY_PASSWORD
+# Without them the build still works: Spotify metadata stays unavailable and the APK gets a
+# throwaway debug signature.
 on:
   workflow_dispatch:
 
 jobs:
   build-debug-apk:
     runs-on: ubuntu-latest
+    env:
+      AndroidAutoIdrive_SpotifyApiKey: ${{ secrets.MYAIDRIVE_CLAUDE_SPOTIFY_CLIENT_ID }}
     steps:
       - name: Checkout the project
         uses: actions/checkout@v4
@@ -31,12 +41,54 @@ jobs:
       - name: Download build dependencies
         uses: ./.github/actions/download-externals-action
 
-      - name: Build debug APK (nomap, no analytics - no secrets required)
+      - name: Decode the edition signing key (if configured)
+        env:
+          KEYSTORE_BASE64: ${{ secrets.MYAIDRIVE_CLAUDE_KEYSTORE_BASE64 }}
+          KEYSTORE_PASSWORD: ${{ secrets.MYAIDRIVE_CLAUDE_KEYSTORE_PASSWORD }}
+          KEY_ALIAS: ${{ secrets.MYAIDRIVE_CLAUDE_KEY_ALIAS }}
+          KEY_PASSWORD: ${{ secrets.MYAIDRIVE_CLAUDE_KEY_PASSWORD }}
+        run: |
+          if [ -n "$KEYSTORE_BASE64" ]; then
+            echo "$KEYSTORE_BASE64" | base64 -d > "$RUNNER_TEMP/edition.keystore"
+            {
+              echo "MYAIDRIVE_KEYSTORE_FILE=$RUNNER_TEMP/edition.keystore"
+              echo "MYAIDRIVE_KEYSTORE_PASSWORD=$KEYSTORE_PASSWORD"
+              echo "MYAIDRIVE_KEY_ALIAS=$KEY_ALIAS"
+              echo "MYAIDRIVE_KEY_PASSWORD=$KEY_PASSWORD"
+            } >> "$GITHUB_ENV"
+            echo "Stable edition signing key configured"
+          else
+            echo "::warning::No MYAIDRIVE_CLAUDE_KEYSTORE_BASE64 secret: the APK gets a throwaway debug signature"
+          fi
+          if [ -z "$AndroidAutoIdrive_SpotifyApiKey" ]; then
+            echo "::warning::No MYAIDRIVE_CLAUDE_SPOTIFY_CLIENT_ID secret: Spotify titles/covers/browsing will be unavailable"
+          fi
+
+      - name: Build debug APK (nomap, no analytics)
         run: ./gradlew assembleNomapNonalyticsFullDebug --stacktrace
 
-      - name: Upload debug APK
+      - name: Name the APK
+        run: |
+          mkdir -p dist
+          cp app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk dist/MyAIDrive-Claude-debug.apk
+          (cd dist && sha256sum MyAIDrive-Claude-debug.apk > MyAIDrive-Claude-debug.apk.sha256 && cat MyAIDrive-Claude-debug.apk.sha256)
+
+      - name: Upload MyAIDrive-Claude-debug.apk
         uses: actions/upload-artifact@v4
         with:
-          name: aaidrive-debug-apk
-          retention-days: 7
-          path: app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk
+          name: MyAIDrive-Claude-debug
+          retention-days: 14
+          path: |
+            dist/MyAIDrive-Claude-debug.apk
+            dist/MyAIDrive-Claude-debug.apk.sha256
+
+      - name: Run unit tests
+        run: ./gradlew testNomapNonalyticsFullDebugUnitTest --stacktrace
+
+      - name: Upload unit test report
+        if: always()
+        uses: actions/upload-artifact@v4
+        with:
+          name: MyAIDrive-Claude-unit-tests
+          retention-days: 14
+          path: app/build/reports/tests/testNomapNonalyticsFullDebugUnitTest/
