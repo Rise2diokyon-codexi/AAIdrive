@@ -2,6 +2,8 @@ package me.hufman.androidautoidrive.carapp.dashboard
 
 import android.content.Context
 import android.graphics.Canvas
+import android.graphics.Color
+import android.graphics.Paint
 import android.util.AttributeSet
 import android.view.View
 
@@ -23,10 +25,22 @@ class DashboardView @JvmOverloads constructor(
 	var data: DashboardData = DashboardData.PLACEHOLDER
 		set(value) { field = value; invalidate() }
 
+	/** Must only be set false when data is provided by a verified live CDS source. */
+	var demoMode: Boolean = true
+		set(value) { field = value; invalidate() }
+
 	private var renderer: DashboardRenderer = rendererFor(theme)
 
 	override fun onDraw(canvas: Canvas) {
 		super.onDraw(canvas)
 		renderer.draw(canvas, width, height, data)
+		if (demoMode) {
+			val paint = Paint(Paint.ANTI_ALIAS_FLAG).apply {
+				color = Color.YELLOW
+				textSize = (height * 0.045f).coerceIn(12f, 32f)
+				isFakeBoldText = true
+			}
+			canvas.drawText("DEMO - SIMULATED DATA", 12f, paint.textSize + 8f, paint)
+		}
 	}
 }
