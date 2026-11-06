@@ -288,7 +288,17 @@ class CarDetailedInfo(carCapabilities: Map<String, Any?>, cdsMetrics: CDSMetrics
 		distOrCityLabel, timeOrStreetLabel
 	)
 
+	// GPT edition: expose real vehicle telemetry through the existing RHMI category UI.
+	// Unlike the graphical prototype, these fields are live CDS flows with vehicle units.
+	// Fuel is displayed as volume, never incorrectly as a tank percentage.
+	private val myAiDriveFields: List<Flow<String>> = listOf(
+		engineTemp, oilTemp,
+		fuelLevelLabel, accBatteryLevelLabel,
+		drivingMode.map { "MODE $it" }, speed
+	)
+
 	val basicCategories = LinkedHashMap<String, List<Flow<String>>>().apply {
+		put("My AI Drive GPT", myAiDriveFields)
 		put(L.CARINFO_TITLE, overviewFields)
 		put(L.CARINFO_TITLE_DRIVING, drivingFields)
 		put(L.CARINFO_TITLE_SPORT, sportFields)
