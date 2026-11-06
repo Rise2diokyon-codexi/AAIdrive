@@ -125,6 +125,9 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
+            // Independent GPT test edition; never overwrites upstream AAIdrive.
+            applicationIdSuffix '.gpt'
+            versionNameSuffix '-gpt'
             if (runProguardInDebug || isRunningOnCI) {        // make sure to run tests against minified code in CI, but local dev can be fast
                 postprocessing {
                     removeUnusedCode true
