@@ -27,13 +27,20 @@ class MModernDashboardRenderer : DashboardRenderer {
 			Triple("MODE", data.drivingMode, DashboardColors.M_RED)
 		)
 
+		// Five narrow columns clipped values on common 1280x480 iDrive displays.
+		// Use a balanced 3+2 layout instead, with legible labels and driving mode.
 		val gridTop = height * 0.5f + gap
-		val gridHeight = height - gridTop - gap
-		val tileWidth = (width - gap * (tiles.size + 1)) / tiles.size
-		tiles.forEachIndexed { i, (label, value, accent) ->
-			val left = gap + i * (tileWidth + gap)
-			val rect = RectF(left, gridTop, left + tileWidth, gridTop + gridHeight)
-			drawTile(canvas, rect, label, value, "", accent, valueTextFraction = 0.22f)
+		val gridBottom = height - gap
+		val rowHeight = (gridBottom - gridTop - gap) / 2f
+		tiles.forEachIndexed { index, (label, value, accent) ->
+			val row = if (index < 3) 0 else 1
+			val columns = if (row == 0) 3 else 2
+			val column = if (row == 0) index else index - 3
+			val tileWidth = (width - (columns + 1) * gap) / columns
+			val left = gap + column * (tileWidth + gap)
+			val top = gridTop + row * (rowHeight + gap)
+			val rect = RectF(left, top, left + tileWidth, top + rowHeight)
+			drawTile(canvas, rect, label, value, "", accent, valueTextFraction = 0.30f)
 		}
 	}
 
