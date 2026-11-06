@@ -31,12 +31,12 @@ jobs:
       - name: Download build dependencies
         uses: ./.github/actions/download-externals-action
 
-      - name: Build debug APK (nomap, no analytics - no secrets required)
+      - name: Build My AI Drive GPT debug APK (nomap, no analytics)
         run: ./gradlew assembleNomapNonalyticsFullDebug --stacktrace
 
       - name: Upload debug APK
         uses: actions/upload-artifact@v4
         with:
-          name: aaidrive-debug-apk
+          name: MyAIDrive-GPT-debug
           retention-days: 7
           path: app/build/outputs/apk/nomapNonalyticsFull/debug/*.apk
