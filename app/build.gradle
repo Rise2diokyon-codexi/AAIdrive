@@ -96,6 +96,21 @@ android {
 
     signingConfigs {
         release
+        debug {
+            // Dedicated, stable debug key for this fork (app/debug.keystore, checked in - a
+            // debug-only key, not used for any Play Store release, so no secrecy requirement,
+            // same as AGP's own public "androiddebugkey" convention).
+            // Without this, AGP auto-generates a brand new, never-seen-before debug keystore
+            // on every CI run (confirmed: each build's APK had a different self-signed cert,
+            // "CN=Android Debug", valid from the exact build timestamp). That meant every
+            // Manual Debug APK Build produced an APK Android treats as a different app,
+            // unable to update in place over the previous install, and added to Play
+            // Protect's "never seen this signature before" signal on every single install.
+            storeFile file("debug.keystore")
+            storePassword "mybmwdrive-debug"
+            keyAlias "mybmwdrive-debug"
+            keyPassword "mybmwdrive-debug"
+        }
     }
     if (isRunningOnCI) {
         // configure keystore
@@ -132,6 +147,7 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
+            signingConfig signingConfigs.debug
             if (runProguardInDebug || isRunningOnCI) {        // make sure to run tests against minified code in CI, but local dev can be fast
                 postprocessing {
                     removeUnusedCode true
