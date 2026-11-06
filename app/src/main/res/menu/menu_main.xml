@@ -51,6 +51,10 @@
     </group>
     <group android:id="@+id/menugroup_support">
         <item
+            android:id="@+id/nav_edition"
+            android:icon="@drawable/ic_baseline_directions_car_24"
+            android:title="@string/menu_edition" />
+        <item
             android:id="@+id/nav_addons"
             android:icon="@drawable/ic_outline_extension_24"
             android:title="@string/menu_addons" />

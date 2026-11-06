@@ -5,4 +5,15 @@
     <string name="edition_credits" translatable="false">Claude Edition · basé sur AAIdrive (BimmerGestalt, licence MIT)</string>
     <color name="edition_icon_background">#D97757</color>
     <color name="edition_accent">#D97757</color>
+    <string name="menu_edition" translatable="false">Édition &amp; diagnostic</string>
+    <string name="edition_section_settings" translatable="false">Réglages de l\'édition</string>
+    <string name="edition_section_diagnostics" translatable="false">Diagnostic</string>
+    <string name="edition_car_connection" translatable="false">Connexion à la voiture (cette édition)</string>
+    <string name="edition_car_connection_hint" translatable="false">Une seule édition (AAIdrive, Claude, GPT) doit être connectée à iDrive à la fois : désactivez la connexion dans les autres avant un essai.</string>
+    <string name="edition_dashboard_theme" translatable="false">Thème My AI Drive (aussi changeable à la molette iDrive)</string>
+    <string name="edition_theme_classic" translatable="false">M Classic</string>
+    <string name="edition_theme_modern" translatable="false">M Modern</string>
+    <string name="edition_demo_mode" translatable="false">Mode démonstration (valeurs simulées, signalées « DÉMO »)</string>
+    <string name="edition_dashboard_preview" translatable="false">Aperçu du tableau de bord My AI Drive</string>
+    <string name="edition_open_settings" translatable="false">Ouvrir le réglage</string>
 </resources>

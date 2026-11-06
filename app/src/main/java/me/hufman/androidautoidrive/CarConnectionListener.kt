@@ -31,12 +31,9 @@ class CarConnectionListener: BroadcastReceiver() {
 		try {
 			if (intent.action == IDriveConnectionReceiver.INTENT_ATTACHED ||
 					intent.action == connectAction(context)) {
-				if (android.os.Build.VERSION.SDK_INT >= android.os.Build.VERSION_CODES.O) {
-					// this is a clear signal of car connection, we can confidently startForeground
-					context.startForegroundService(Intent(context, MainService::class.java).setAction(MainService.ACTION_START))
-				} else {
-					context.startService(Intent(context, MainService::class.java).setAction(MainService.ACTION_START))
-				}
+				// a clear signal of car connection, so startForeground is safe; skipped if the
+				// user made another edition the active one
+				EditionCarConnection.startService(context)
 			}
 			if (intent.action == IDriveConnectionReceiver.INTENT_DETACHED ||
 					intent.action == disconnectAction(context)) {

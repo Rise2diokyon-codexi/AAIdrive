@@ -91,8 +91,21 @@ android {
         buildConfigField "boolean", "SHOW_DONATION", "true"
     }
 
+    // Stable signing for the Claude Edition test builds, from secrets only (never committed):
+    // MYAIDRIVE_KEYSTORE_FILE points to a keystore decoded by the CI workflow (see docs/claude-edition).
+    // Without it, AGP signs with a throwaway debug key that changes on every CI run.
+    def editionKeystore = System.getenv("MYAIDRIVE_KEYSTORE_FILE")
+    def hasEditionKeystore = editionKeystore && file(editionKeystore).exists()
     signingConfigs {
         release
+        if (hasEditionKeystore) {
+            edition {
+                storeFile file(editionKeystore)
+                storePassword System.getenv("MYAIDRIVE_KEYSTORE_PASSWORD")
+                keyAlias System.getenv("MYAIDRIVE_KEY_ALIAS")
+                keyPassword System.getenv("MYAIDRIVE_KEY_PASSWORD")
+            }
+        }
     }
     if (isRunningOnCI) {
         // configure keystore
@@ -129,6 +142,9 @@ android {
             signingConfig signingConfigs.release
         }
         debug {
+            if (hasEditionKeystore) {
+                signingConfig signingConfigs.edition
+            }
             if (runProguardInDebug || isRunningOnCI) {        // make sure to run tests against minified code in CI, but local dev can be fast
                 postprocessing {
                     removeUnusedCode true

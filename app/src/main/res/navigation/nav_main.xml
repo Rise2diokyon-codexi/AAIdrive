@@ -44,6 +44,10 @@
         android:name="me.hufman.androidautoidrive.phoneui.fragments.AddonsPageFragment"
         android:label="@string/menu_addons" />
     <fragment
+        android:id="@+id/nav_edition"
+        android:name="me.hufman.androidautoidrive.phoneui.fragments.EditionDiagnosticsFragment"
+        android:label="@string/menu_edition" />
+    <fragment
         android:id="@+id/nav_settings"
         android:name="me.hufman.androidautoidrive.phoneui.fragments.SettingsPageFragment"
         android:label="@string/menu_settings" />

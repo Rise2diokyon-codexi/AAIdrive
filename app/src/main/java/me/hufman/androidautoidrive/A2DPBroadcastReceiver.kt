@@ -52,6 +52,10 @@ class A2DPBroadcastReceiver: BroadcastReceiver() {
 	}
 
 	fun startMainService(context: Context) {
+		if (!EditionCarConnection.isEnabled(context)) {
+			Log.i(TAG, "Ignoring Bluetooth car connection, this edition is not the active one")
+			return
+		}
 		Log.i(TAG, "Starting the service because of a Bluetooth car connection")
 		val intent = Intent(context, MainService::class.java)
 				.setAction(MainService.ACTION_START)

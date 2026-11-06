@@ -146,6 +146,13 @@ class MainService: Service() {
 				true)
 
 		val action = intent?.action ?: ""
+		if (action == ACTION_START && !AppSettings[AppSettings.KEYS.CAR_CONNECTION_ENABLED].toBoolean()) {
+			// another edition is the active one: we were already startForeground'ed above, so stop cleanly
+			Log.i(TAG, "Car connection disabled for this edition, stopping")
+			handleActionStop()
+			stopSelf()
+			return START_NOT_STICKY
+		}
 		if (action == ACTION_START) {
 			handleActionStart()
 		} else if (action == ACTION_STOP) {
